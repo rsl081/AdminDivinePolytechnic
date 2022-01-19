@@ -24,10 +24,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.s2dioapps.admindivinepolytechnic.R;
 import com.s2dioapps.admindivinepolytechnic.ui.test.TestActivity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -100,7 +103,6 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     SubjectFragment.selected_cat_index = pos;
                     Intent intent = new Intent(itemView.getContext(), TestActivity.class);
                     itemView.getContext().startActivity(intent);
@@ -177,11 +179,19 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
                 {
                     catDoc.put("CAT" + String.valueOf(index) + "_ID", sub_list.get(i).getId());
                     catDoc.put("CAT" + String.valueOf(index) + "_NAME", sub_list.get(i).getName());
+                    catDoc.put("CAT" + String.valueOf(index) + "_NO_OF_TESTS", sub_list.get(i).getNoOfTests());
                     index++;
                 }else{
 
                     firestore.collection("Quiz").document(sub_list.get(i).getId())
                         .delete();
+
+//                    firestore.collection("Quiz")
+//                            .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
+//                            .collection("TEST_LIST")
+//                            .document("TEST_INFO")
+//                            .delete();
+
 
                 }
 

@@ -24,10 +24,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.WriteBatch;
 import com.s2dioapps.admindivinepolytechnic.R;
-import com.s2dioapps.admindivinepolytechnic.databinding.FragmentSubjectBinding;
+import com.s2dioapps.admindivinepolytechnic.ui.test.TestActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +94,7 @@ public class SubjectFragment extends Fragment {
             public void onClick(View v) {
                 if(dialogCatName.getText().toString().isEmpty())
                 {
-                    dialogCatName.setError("Enter Category Name");
+                    dialogCatName.setError("Enter Subject Name");
                     return;
                 }
 
@@ -109,8 +113,11 @@ public class SubjectFragment extends Fragment {
 
     void addNewCategory(final String title)
     {
+
         addCatDialog.dismiss();
         loadingDialog.show();
+
+        WriteBatch batch = firestore.batch();
 
         final String doc_id = firestore.collection("Quiz").document().getId();
 
@@ -119,6 +126,15 @@ public class SubjectFragment extends Fragment {
         catData.put("NAME",title);
         catData.put("NO_OF_TESTS",0);
         catData.put("COUNTER","1");
+
+        DocumentReference testDoc = firestore.collection("Quiz")
+                .document(FirebaseAuth.getInstance().getUid())
+                .collection("TEST_LIST")
+                .document("TEST_INFO");
+
+        batch.set(testDoc, catData, SetOptions.merge());
+        batch.commit();
+
 
         firestore.collection("Quiz").document(doc_id)
                 .set(catData)
@@ -130,6 +146,7 @@ public class SubjectFragment extends Fragment {
                         Map<String,Object> catDoc = new ArrayMap<>();
                         catDoc.put("CAT" + String.valueOf(catList.size() + 1) + "_ID",doc_id);
                         catDoc.put("CAT" + String.valueOf(catList.size() + 1) + "_NAME",title);
+                        catDoc.put("CAT" + String.valueOf(catList.size() + 1) + "_NO_OF_TESTS",0);
                         catDoc.put("COUNT", catList.size() + 1);
 
                         firestore.collection("Quiz").document("Categories")
@@ -193,8 +210,9 @@ public class SubjectFragment extends Fragment {
                         {
                             String catName = doc.getString("CAT" + String.valueOf(i) + "_NAME");
                             String catid = doc.getString("CAT" + String.valueOf(i) + "_ID");
+                            int noOfTest = doc.getLong("CAT" + String.valueOf(i) + "_NO_OF_TESTS").intValue();
 
-                            catList.add(new SubjectModel(catid,catName,0,"1"));
+                            catList.add(new SubjectModel(catid,catName,noOfTest,"1"));
                         }
 
                         adapter = new SubjectAdapter(catList);

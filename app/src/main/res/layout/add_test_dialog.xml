@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/ac_cat_name"
+        android:id="@+id/et_test_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -15,7 +15,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Subject Name"
+        android:hint="Test Name"
         android:textColor="@android:color/black"
         android:backgroundTint="@color/teal_200"
         android:textCursorDrawable="@null"
@@ -23,8 +23,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/et_test_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Test Time"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@color/teal_200"
+        android:textCursorDrawable="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_test_name" />
+
     <Button
-        android:id="@+id/ac_add_btn"
+        android:id="@+id/btn_add_test"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -38,6 +55,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ac_cat_name" />
+        app:layout_constraintTop_toBottomOf="@+id/et_test_time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
