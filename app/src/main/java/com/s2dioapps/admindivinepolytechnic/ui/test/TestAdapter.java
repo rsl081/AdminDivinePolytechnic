@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +22,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.s2dioapps.admindivinepolytechnic.R;
 import com.s2dioapps.admindivinepolytechnic.common.DbQuery;
 import com.s2dioapps.admindivinepolytechnic.ui.subject.SubjectFragment;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
@@ -77,11 +84,13 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             loadingDialog.setCancelable(false);
             loadingDialog.getWindow().setBackgroundDrawableResource(R.drawable.progress_background);
             loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
         }
 
         private void setData(final int pos, final String setID, final TestAdapter adapter)
         {
             setName.setText("TEST " + String.valueOf(pos + 1));
+
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -101,13 +110,13 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                 public void onClick(View v) {
 
                     AlertDialog dialog = new AlertDialog.Builder(itemView.getContext())
-                            .setTitle("Delete Set")
-                            .setMessage("Do you want to delete this set ?")
+                            .setTitle("Delete Test")
+                            .setMessage("Do you want to delete this test ?")
                             .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    deleteSet(pos, setID,itemView.getContext(), adapter);
+                                    deleteSet(pos,itemView.getContext(), adapter);
                                 }
                             })
                             .setNegativeButton("Cancel",null)
@@ -127,86 +136,78 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
         }
 
 
-        private void deleteSet(final int pos, String setID, final Context context, final TestAdapter adapter)
+        private void deleteSet(final int pos, final Context context, final TestAdapter adapter)
         {
-            loadingDialog.show();
+            //loadingDialog.show();
 
-            final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            firestore.collection("Quiz").document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
-                    .collection(setID).get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+            DocumentReference docRef = firestore.collection("Quiz")
+                    .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
+                    .collection("TEST_LIST")
+                    .document("TEST_INFO");
+
+            final Map<String,Object> updates = new HashMap<>();
+            updates.put("TEST"+ (pos + 1) +"_ID", FieldValue.delete());
+            updates.put("TEST"+ (pos + 1)+"_TIME", FieldValue.delete());
+
+
+
+            docRef.update(updates)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        public void onSuccess(Void unused) {
 
-                            WriteBatch batch = firestore.batch();
+                            TestActivity.testList.remove(pos);
+                            adapter.notifyDataSetChanged();
 
-                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                        DocumentReference setDocRef = firestore.collection("Quiz")
+                                .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
+                                .collection("TEST_LIST")
+                                .document("TEST_INFO");
+
+                        final Map<String,Object> setUpdates = new HashMap<>();
+
+
+
+                            for(int i = 0; i < TestActivity.testList.size(); i++)
                             {
-                                batch.delete(doc.getReference());
+                                setUpdates.put("TEST"+ (i + 1) +"_ID", TestActivity.testList.get(i).getTestID());
+                                setUpdates.put("TEST"+ (i + 1 ) +"_TIME", TestActivity.testList.get(i).getTime());
+                                Log.e("HEYE", "count" + (i + 1) + " " + TestActivity.testList.get(i).getTestID());
                             }
+                            setDocRef.set(setUpdates);
 
-                            batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
 
-                                    Map<String, Object> catDoc = new ArrayMap<>();
-                                    int index=1;
-                                    for(int i=0; i< setIDs.size();  i++)
-                                    {
-                                        if(i != pos)
-                                        {
-                                            catDoc.put("TEST" + String.valueOf(index) + "_ID", setIDs.get(i));
-                                            index++;
-                                        }
-                                    }
-
-                                    catDoc.put("SETS", index-1);
-
-                                    firestore.collection("Quiz").document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
-                                            .update(catDoc)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Toast.makeText(context,"Set deleted Sucesfully",Toast.LENGTH_SHORT).show();
-
-                                                    //SubjectFragment.setsIDs.remove(pos);
-
-                                                    //SubjectFragment.catList.get(SubjectFragment.selected_cat_index).setNoOfSets(String.valueOf(SetsActivity.setsIDs.size()));
-
-                                                    adapter.notifyDataSetChanged();
-
-                                                    loadingDialog.dismiss();
-
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
-                                                    loadingDialog.dismiss();
-                                                }
-                                            });
-
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
-                                    loadingDialog.dismiss();
-                                }
-                            });
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
-                            loadingDialog.dismiss();
                         }
                     });
+
+
+
+            DocumentReference docTest = firestore.collection("Quiz")
+                    .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId());
+
+            Map<String,Object> test = new HashMap<>();
+            test.put("NO_OF_TESTS", --TestActivity.ctrTest);
+            docTest.update(test)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+
+                            SubjectFragment.catList.get(SubjectFragment.selected_cat_index).setNoOfTests(TestActivity.ctrTest);
+
+                            DocumentReference docCategories = firestore.collection("Quiz")
+                                    .document("Categories");
+
+                            Map<String,Object> categories = new HashMap<>();
+                            categories.put("CAT"+ (SubjectFragment.selected_cat_index + 1) +"_NO_OF_TESTS", TestActivity.ctrTest);
+                            docCategories.update(categories);
+
+                        }
+                    });
+
+
 
         }//end of deleteSet
 

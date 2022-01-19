@@ -93,7 +93,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        totalUsersTV.setText("Total Users: " + DbQuery.g_usersCount);
+        DbQuery.getUsersCount(new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+
+                totalUsersTV.setText("Total Users: " + DbQuery.g_usersCount);
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
 //        myImgTextTV.setText(DbQuery.myPerformance.getName().toUpperCase().substring(0,1));
 
         return view;

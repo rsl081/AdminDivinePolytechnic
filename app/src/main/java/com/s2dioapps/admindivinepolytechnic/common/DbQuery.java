@@ -118,4 +118,26 @@ public class DbQuery {
                     }
                 });
     }
+
+    public static void getUsersCount(MyCompleteListener completeListener)
+    {
+        g_firestore.collection("Users").document(NodeNames.TOTAL_USERS)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                        g_usersCount = documentSnapshot.getLong("COUNT").intValue();
+
+                        completeListener.onSuccess();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
+    }
 }
