@@ -183,8 +183,6 @@ public class SubjectFragment extends Fragment {
                     }
                 });
 
-
-
     }
 
     private void loadData()

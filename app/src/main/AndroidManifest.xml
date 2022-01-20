@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AdminDivinePolytechnic">
         <activity
-            android:name=".ui.test.TestActivity"
+            android:name=".ui.question.QuestionActivity"
             android:exported="false"
             android:theme="@style/Theme.AdminDivinePolytechnic.NoActionBar"/>
+        <activity
+            android:name=".ui.test.TestActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AdminDivinePolytechnic.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="false"

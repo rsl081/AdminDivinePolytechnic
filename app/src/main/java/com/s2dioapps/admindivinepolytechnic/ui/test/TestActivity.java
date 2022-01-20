@@ -20,13 +20,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.s2dioapps.admindivinepolytechnic.R;
 import com.s2dioapps.admindivinepolytechnic.common.DbQuery;
+import com.s2dioapps.admindivinepolytechnic.ui.question.QuestionActivity;
+import com.s2dioapps.admindivinepolytechnic.ui.question.QuestionAdapter;
+import com.s2dioapps.admindivinepolytechnic.ui.question.QuestionModel;
 import com.s2dioapps.admindivinepolytechnic.ui.subject.SubjectFragment;
 
 import java.util.ArrayList;
@@ -40,7 +46,7 @@ public class TestActivity extends AppCompatActivity {
     private TestAdapter adapter;
     private FirebaseFirestore firestore;
     private Dialog loadingDialog;
-    public static int selected_set_index=0;
+    public static int selected_test_index=0;
 
     public static List<TestModel> testList = new ArrayList<>();
 
@@ -122,8 +128,6 @@ public class TestActivity extends AppCompatActivity {
         loadSets();
 
         ctrTest = SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getNoOfTests();
-
-
 
 
     }
@@ -220,6 +224,51 @@ public class TestActivity extends AppCompatActivity {
 
 
     }
+
+    public static void loadDataQuestion() {
+        QuestionActivity.loadingDialog.show();
+
+        QuestionActivity.quesList.clear();
+
+        QuestionActivity.firestore.collection("Question")
+                .whereEqualTo("TEST",TestActivity.testList.get(TestActivity.selected_test_index).getTestID())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        QuestionActivity.loadingDialog.dismiss();
+                        if(task.isSuccessful())
+                        {
+                            QuerySnapshot query = task.getResult();
+                            for(int i = 0 ; i < query.getDocuments().size(); i++)
+                            {
+
+                                String a = query.getDocuments().get(i).getString("A");
+                                int answer = query.getDocuments().get(i).getLong("ANSWER").intValue();
+                                String b = query.getDocuments().get(i).getString("B");
+                                String c = query.getDocuments().get(i).getString("C");
+                                String category = query.getDocuments().get(i).getString("CATEGORY");
+                                String d = query.getDocuments().get(i).getString("D");
+                                String question = query.getDocuments().get(i).getString("QUESTION");
+                                String test = query.getDocuments().get(i).getString("TEST");
+                                String uid = query.getDocuments().get(i).getString("UID");
+
+
+                                //Log.e("DUDE",query.getDocuments().get(i).getString("QUESTION"));
+
+                                QuestionActivity.quesList.add(new QuestionModel(a, answer, b, c, category, d, question, test, uid));
+
+                            }
+
+                            QuestionActivity.adapter = new QuestionAdapter(QuestionActivity.quesList);
+                            QuestionActivity.quest_recycler_view.setAdapter(QuestionActivity.adapter);
+
+                        }
+                    }
+                });
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
