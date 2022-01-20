@@ -20,8 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -32,8 +34,10 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.s2dioapps.admindivinepolytechnic.R;
 import com.s2dioapps.admindivinepolytechnic.common.DbQuery;
+import com.s2dioapps.admindivinepolytechnic.ui.question.QuestionActivity;
 import com.s2dioapps.admindivinepolytechnic.ui.subject.SubjectFragment;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,18 +93,20 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
         private void setData(final int pos, final String setID, final TestAdapter adapter)
         {
-            setName.setText("TEST " + String.valueOf(pos + 1));
-
-
+            //setName.setText("TEST " + String.valueOf(pos + 1));
+            setName.setText(setID);
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-//                    selected_set_index = pos;
-//
-//                    Intent intent = new Intent(itemView.getContext(),QuestionsActivity.class);
-//                    itemView.getContext().startActivity(intent);
+                    TestActivity.selected_test_index = pos;
+
+                    Intent intent = new Intent(itemView.getContext(), QuestionActivity.class);
+                    itemView.getContext().startActivity(intent);
+
+
 
                 }
             });
@@ -142,6 +148,10 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
+//            firestore.collection("Question")
+//                    .document(FirebaseAuth.getInstance().getUid())
+//                    .delete();
+
 
             DocumentReference docRef = firestore.collection("Quiz")
                     .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
@@ -158,6 +168,20 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
+
+                            firestore.collection("Question")
+                                    .whereEqualTo("TEST", TestActivity.testList.get(pos).getTestID())
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            for (QueryDocumentSnapshot document : task.getResult())
+                                            {
+                                                document.getReference().delete();
+                                            }
+
+                                        }
+                                    });
 
                             TestActivity.testList.remove(pos);
                             adapter.notifyDataSetChanged();
@@ -178,6 +202,8 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                                 Log.e("HEYE", "count" + (i + 1) + " " + TestActivity.testList.get(i).getTestID());
                             }
                             setDocRef.set(setUpdates);
+
+
 
 
                         }
