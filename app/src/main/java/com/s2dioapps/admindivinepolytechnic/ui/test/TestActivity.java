@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,6 +37,7 @@ import com.s2dioapps.admindivinepolytechnic.ui.question.QuestionModel;
 import com.s2dioapps.admindivinepolytechnic.ui.subject.SubjectFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -182,11 +184,24 @@ public class TestActivity extends AppCompatActivity {
     {
 
         addTestDialog.dismiss();
-        //loadingDialog.show();
+        loadingDialog.show();
 
         WriteBatch batch = firestore.batch();
 
-        DocumentReference userDoc = DbQuery.g_firestore.collection("Quiz")
+//        DocumentReference userDoc = DbQuery.g_firestore.collection("Users")
+//                                .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
+//                                .collection("USER_DATA")
+//                                .document("MY_SCORES");
+//
+//        Map<String,Object> userInfo = new HashMap<>();
+//
+//        userInfo.put(TestActivity.testList.get(TestActivity.selected_test_index).getTestID(),
+//                    FieldValue.delete());
+//
+//        userDoc.update(userInfo);
+
+
+        DocumentReference quizDoc = DbQuery.g_firestore.collection("Quiz")
                 .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId());
 
         Map<String,Object> testInfo = new ArrayMap<>();
@@ -199,7 +214,7 @@ public class TestActivity extends AppCompatActivity {
         testInfo.put("TEST" + ctrTest + "_TIME",time);
         SubjectFragment.catList.get(SubjectFragment.selected_cat_index).setNoOfTests(ctrTest);
 
-        DocumentReference scoreDoc = userDoc.collection("TEST_LIST").document("TEST_INFO");
+        DocumentReference scoreDoc = quizDoc.collection("TEST_LIST").document("TEST_INFO");
 
         batch.set(scoreDoc, testInfo, SetOptions.merge());
 
@@ -214,12 +229,13 @@ public class TestActivity extends AppCompatActivity {
 
 
                         adapter.notifyItemInserted(testList.size());
+                        loadingDialog.dismiss();
 
                     }
                 });
 
 
-        batch.update(userDoc,"NO_OF_TESTS",ctrTest);
+        batch.update(quizDoc,"NO_OF_TESTS",ctrTest);
         batch.commit();
 
 

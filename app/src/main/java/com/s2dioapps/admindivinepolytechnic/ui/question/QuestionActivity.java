@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +28,7 @@ public class QuestionActivity extends AppCompatActivity {
     public static RecyclerView quest_recycler_view;
     private Button addQuesB;
     public static List<QuestionModel> quesList = new ArrayList<>();
-    public static int selected_cat_index=0;
+    public static int selected_ques_index =0;
 
     public static FirebaseFirestore firestore;
     public static Dialog loadingDialog, addCatDialog;
@@ -43,7 +45,6 @@ public class QuestionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Question");
 
-
         quest_recycler_view = findViewById(R.id.ques_recycler);
         addQuesB = findViewById(R.id.addQuesB);
 
@@ -51,6 +52,15 @@ public class QuestionActivity extends AppCompatActivity {
 
 
         firestore = FirebaseFirestore.getInstance();
+
+        addQuesB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QuestionActivity.this, QuestionDetailsActivity.class);
+                intent.putExtra("ACTION","ADD");
+                startActivity(intent);
+            }
+        });
 
         loadingDialog = new Dialog(QuestionActivity.this);
         loadingDialog.setContentView(R.layout.loading_progressbar);
@@ -78,6 +88,8 @@ public class QuestionActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
 

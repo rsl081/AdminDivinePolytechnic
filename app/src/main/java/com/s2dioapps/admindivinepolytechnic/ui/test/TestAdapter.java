@@ -144,14 +144,9 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
         private void deleteSet(final int pos, final Context context, final TestAdapter adapter)
         {
-            //loadingDialog.show();
+            loadingDialog.show();
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-//            firestore.collection("Question")
-//                    .document(FirebaseAuth.getInstance().getUid())
-//                    .delete();
-
 
             DocumentReference docRef = firestore.collection("Quiz")
                     .document(SubjectFragment.catList.get(SubjectFragment.selected_cat_index).getId())
@@ -161,8 +156,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             final Map<String,Object> updates = new HashMap<>();
             updates.put("TEST"+ (pos + 1) +"_ID", FieldValue.delete());
             updates.put("TEST"+ (pos + 1)+"_TIME", FieldValue.delete());
-
-
 
             docRef.update(updates)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -230,10 +223,12 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                             categories.put("CAT"+ (SubjectFragment.selected_cat_index + 1) +"_NO_OF_TESTS", TestActivity.ctrTest);
                             docCategories.update(categories);
 
+
+
+
+                            loadingDialog.dismiss();
                         }
                     });
-
-
 
         }//end of deleteSet
 
