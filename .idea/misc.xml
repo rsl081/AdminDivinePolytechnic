@@ -5,10 +5,11 @@
       <map>
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/drawable/card_border.xml" value="0.21296296296296297" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/drawable/progress_background.xml" value="0.17239583333333333" />
-        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_login.xml" value="0.22" />
-        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_login.xml" value="0.12" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_no_internet.xml" value="0.14260385005065856" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_question.xml" value="0.18" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_question_details.xml" value="0.17" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_reset_password.xml" value="0.1503623188405797" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_test.xml" value="0.13768115942028986" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/add_sub_dialog.xml" value="0.13768115942028986" />
@@ -24,10 +25,11 @@
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_leaderboard.xml" value="0.25" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_notifications.xml" value="0.13768115942028986" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_slideshow.xml" value="0.14260385005065856" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_subject.xml" value="0.1" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/loading_progressbar.xml" value="0.13768115942028986" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/nav_header_main.xml" value="0.14402173913043478" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/rank_item_layout.xml" value="0.14402173913043478" />
-        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/sub_item_layout.xml" value="0.25" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/sub_item_layout.xml" value="0.15" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/test_item_layout.xml" value="0.14260385005065856" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/menu/bottom_nav_menu.xml" value="0.15625" />
       </map>
