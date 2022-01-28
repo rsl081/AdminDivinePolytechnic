@@ -41,7 +41,6 @@ public class QuestionDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_details);
 
-
         Toolbar toolbar = findViewById(R.id.qdetails_toolbar);
         setSupportActionBar(toolbar);
 

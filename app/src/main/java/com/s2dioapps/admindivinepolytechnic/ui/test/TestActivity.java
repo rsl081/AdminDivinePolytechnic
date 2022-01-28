@@ -109,12 +109,16 @@ public class TestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(dialogTestName.getText().toString().isEmpty())
                 {
+
                     dialogTestName.setError("Enter Test Name");
                     return;
+
                 }else if(dialogTestTime.getText().toString().isEmpty())
                 {
+
                     dialogTestTime.setError("Enter Test Time");
                     return;
+
                 }
 
                 addNewTest(dialogTestName.getText().toString(), Integer.parseInt(dialogTestTime.getText().toString()));
@@ -125,7 +129,6 @@ public class TestActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         testView.setLayoutManager(layoutManager);
-
 
         loadSets();
 
@@ -234,10 +237,8 @@ public class TestActivity extends AppCompatActivity {
                     }
                 });
 
-
         batch.update(quizDoc,"NO_OF_TESTS",ctrTest);
         batch.commit();
-
 
     }
 

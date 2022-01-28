@@ -50,7 +50,6 @@ public class QuestionActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
         firestore = FirebaseFirestore.getInstance();
 
         addQuesB.setOnClickListener(new View.OnClickListener() {
