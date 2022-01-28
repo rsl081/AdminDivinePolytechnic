@@ -7,6 +7,7 @@
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/drawable/progress_background.xml" value="0.17239583333333333" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_login.xml" value="0.12" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_module.xml" value="0.19746376811594202" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_no_internet.xml" value="0.14260385005065856" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_question.xml" value="0.18" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/activity_question_details.xml" value="0.17" />
@@ -23,6 +24,7 @@
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_gallery.xml" value="0.14260385005065856" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_home.xml" value="0.2" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_leaderboard.xml" value="0.25" />
+        <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_lesson.xml" value="0.21" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_notifications.xml" value="0.13768115942028986" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_slideshow.xml" value="0.14260385005065856" />
         <entry key="..\:/Users/Rsl/Desktop/desktop/AndroidStudioProject/AdminDivinePolytechnic/app/src/main/res/layout/fragment_subject.xml" value="0.1" />

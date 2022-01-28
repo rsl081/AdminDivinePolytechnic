@@ -211,6 +211,7 @@ public class SubjectFragment extends Fragment {
                             int noOfTest = doc.getLong("CAT" + String.valueOf(i) + "_NO_OF_TESTS").intValue();
 
                             catList.add(new SubjectModel(catid,catName,noOfTest,"1"));
+
                         }
 
                         adapter = new SubjectAdapter(catList);

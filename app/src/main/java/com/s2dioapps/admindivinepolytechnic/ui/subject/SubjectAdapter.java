@@ -154,8 +154,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHold
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
 
-                    dialog.getButton(dialog.BUTTON_POSITIVE).setBackgroundColor(Color.RED);
-                    dialog.getButton(dialog.BUTTON_NEGATIVE).setBackgroundColor(Color.RED);
+//                    dialog.getButton(dialog.BUTTON_POSITIVE).setBackgroundColor(Color.RED);
+//                    dialog.getButton(dialog.BUTTON_NEGATIVE).setBackgroundColor(Color.RED);
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     params.setMargins(0,0,50,0);

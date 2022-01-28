@@ -1,4 +1,4 @@
-package com.s2dioapps.admindivinepolytechnic.ui.question;
+package com.s2dioapps.admindivinepolytechnic.ui.lesson;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,61 +15,65 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.s2dioapps.admindivinepolytechnic.R;
+import com.s2dioapps.admindivinepolytechnic.ui.module.ModuleActivity;
 import com.s2dioapps.admindivinepolytechnic.ui.subject.SubjectFragment;
-
+import com.s2dioapps.admindivinepolytechnic.ui.test.TestActivity;
 
 import java.util.List;
 import java.util.Map;
 
-public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder>  {
+public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.ViewHolder> {
 
-    private List<QuestionModel> ques_list;
+    private List<LessonModel> lesson_list;
 
-    public QuestionAdapter(List<QuestionModel> ques_list) {
-        this.ques_list = ques_list;
+    public LessonAdapter(List<LessonModel> lesson_list) {
+        this.lesson_list = lesson_list;
     }
 
     @NonNull
     @Override
-    public QuestionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public LessonAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sub_item_layout,viewGroup,false);
 
-        return new QuestionAdapter.ViewHolder(view);
+        return new LessonAdapter.ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull QuestionAdapter.ViewHolder holder, int position) {
 
-        String title = ques_list.get(position).getQuestion();
+    @Override
+    public void onBindViewHolder(@NonNull LessonAdapter.ViewHolder holder, int position) {
+
+        String title = lesson_list.get(position).getNameModules();
 
         holder.setData(title, position, this);
 
     }
-
     public int getItemCount() {
-        return ques_list.size();
+        return lesson_list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView catName;
+        private TextView lessonName;
         private ImageView deleteB;
         private Dialog loadingDialog;
         private Dialog editDialog;
-        private EditText tv_editCatName;
-        private Button updateCatB;
+        private EditText tv_editLessonName;
+        private Button updateLessonB;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            catName = itemView.findViewById(R.id.catName);
+            lessonName = itemView.findViewById(R.id.catName);
             deleteB = itemView.findViewById(R.id.catDelB);
 
             loadingDialog = new Dialog(itemView.getContext());
@@ -84,32 +88,30 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             editDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
-            tv_editCatName = editDialog.findViewById(R.id.ec_cat_name);
-            updateCatB = editDialog.findViewById(R.id.ec_add_btn);
+            tv_editLessonName = editDialog.findViewById(R.id.ec_cat_name);
+            updateLessonB = editDialog.findViewById(R.id.ec_add_btn);
+
 
         }
 
-        private void setData(String title, final int pos, final QuestionAdapter adapter)
+        private void setData(String title, final int pos, final LessonAdapter adapter)
         {
-            //catName.setText(title);
-            catName.setText("Question " + String.valueOf(pos + 1));
+            lessonName.setText(title);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    QuestionActivity.selected_ques_index = pos;
-                    Intent intent = new Intent(itemView.getContext(), QuestionDetailsActivity.class);
-
-                    intent.putExtra("ACTION","EDIT");
-                    intent.putExtra("Q_ID", pos);
-
+                    LessonFragment.selected_lesson_index = pos;
+                    Intent intent = new Intent(itemView.getContext(), ModuleActivity.class);
                     itemView.getContext().startActivity(intent);
                 }
             });
 
+
             deleteB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     AlertDialog dialog = new AlertDialog.Builder(itemView.getContext())
                             .setTitle("Delete Category")
                             .setMessage("Do you want to delete this category ?")
@@ -117,65 +119,81 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    deleteQuestion(pos, itemView.getContext(), adapter);
+                                    deleteLesson(pos, itemView.getContext(), adapter);
                                 }
                             })
                             .setNegativeButton("Cancel",null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
 
-                    dialog.getButton(dialog.BUTTON_POSITIVE).setBackgroundColor(Color.RED);
-                    dialog.getButton(dialog.BUTTON_NEGATIVE).setBackgroundColor(Color.RED);
+//                    dialog.getButton(dialog.BUTTON_POSITIVE).setBackgroundColor(Color.GRAY);
+//                    dialog.getButton(dialog.BUTTON_NEGATIVE).setBackgroundColor(Color.GRAY);
 
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     params.setMargins(0,0,50,0);
                     dialog.getButton(dialog.BUTTON_NEGATIVE).setLayoutParams(params);
+
                 }
             });
 
         }//end of setData
 
-        private void deleteQuestion(final int id, final Context context, final QuestionAdapter adapter)
-        {
+        private void deleteLesson(final int id, final Context context, final LessonAdapter adapter) {
             loadingDialog.show();
 
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-            Map<String,Object> catDoc = new ArrayMap<>();
+            Map<String,Object> lessonDoc = new ArrayMap<>();
             int index=1;
-            for(int i=0; i < ques_list.size(); i++)
+
+            for(int i=0; i < lesson_list.size(); i++)
             {
                 if( i != id)
                 {
-//                    catDoc.put("CAT" + String.valueOf(index) + "_ID", sub_list.get(i).getId());
-//                    catDoc.put("CAT" + String.valueOf(index) + "_NAME", sub_list.get(i).getName());
-//                    catDoc.put("CAT" + String.valueOf(index) + "_NO_OF_TESTS", sub_list.get(i).getNoOfTests());
+                    lessonDoc.put("SUB" + String.valueOf(index) + "_ID", lesson_list.get(i).getLe_id());
+                    lessonDoc.put("SUB" + String.valueOf(index) + "_NAME", lesson_list.get(i).getNameModules());
+                    lessonDoc.put("SUB" + String.valueOf(index) + "_NO_OF_MODULES", lesson_list.get(i).getNoOfModules());
                     index++;
                 }else{
 
-                    firestore.collection("Question").document(ques_list.get(i).getUid())
-                            .delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    QuestionActivity.quesList.remove(id);
-
-                                    adapter.notifyDataSetChanged();
-
-                                    loadingDialog.dismiss();
-                                }
-                            });
+                    firestore.collection("Lessons").document(lesson_list.get(i).getLe_id())
+                            .delete();
 
                 }
 
             }
 
-        }//end of deleteCategory
+            lessonDoc.put("COUNT", index - 1);
+
+            firestore.collection("Lessons").document("SUBJECTS")
+                    .set(lessonDoc)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            Toast.makeText(context,"Lessons deleted successfully",Toast.LENGTH_SHORT).show();
+
+                            LessonFragment.lessonList.remove(id);
+
+                            adapter.notifyDataSetChanged();
+
+                            loadingDialog.dismiss();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
+                            loadingDialog.dismiss();
+                        }
+                    });
+
+
+        }//end of deleteLesson
 
 
     }
-
-
 
 
 }
