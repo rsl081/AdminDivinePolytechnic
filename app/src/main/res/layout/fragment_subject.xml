@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/school_bg"
         android:padding="16dp"
-        android:text="Add New Category"
+        android:text="Add New Subject"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

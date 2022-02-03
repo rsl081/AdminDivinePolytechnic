@@ -25,7 +25,7 @@
         android:id="@+id/admin_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ADMIN"
+        android:text="TEACHER"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="30sp"
